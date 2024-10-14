@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminSeeder extends Seeder
 {
@@ -15,6 +16,10 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
+        // Disable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        // Truncate users table
         User::truncate();
 
         // Admin
@@ -25,5 +30,8 @@ class AdminSeeder extends Seeder
             'password'          => Hash::make(config('const.admin.password')),
             'mobile_number'     => config('const.admin.mobile_number'),
         ]);
+
+        // Re-enable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
